@@ -7,8 +7,6 @@ from .views import AnnonceViewSet
 router = DefaultRouter()
 router.register('annonce', AnnonceViewSet, basename='annonce')
 urlpatterns = [
-    path('Annonce/', views.Annonce_list),
-    path('Annonce/<int:id>', views.Annonce_detail),
     path('', include(router.urls))
 
 ]
