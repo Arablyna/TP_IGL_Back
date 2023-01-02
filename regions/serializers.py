@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Wilaya, Commune
 
+
 class WilayaSerialaizer(serializers.ModelSerializer):
     class Meta:
         model = Wilaya
@@ -8,7 +9,7 @@ class WilayaSerialaizer(serializers.ModelSerializer):
 
 
 class CommuneSerializer(serializers.ModelSerializer):
-    wilaya = WilayaSerialaizer(many = False)
+    wilaya = WilayaSerialaizer(many = False,read_only=True)
     class Meta:
         model = Commune
         fields = ['id', 'name', 'wilaya']
