@@ -9,39 +9,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
-@api_view(['GET', 'POST'])
-def Annonce_list(request):
-    if request.method == 'GET':
-        annonce = Annonce.objects.all()
-        serializer = AnnonceSerializer(annonce, many=True)
-        return Response(serializer.data)
-
-    if request.method == 'POST':
-        serializer = AnnonceSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-def Annonce_detail(request, id, format=None):
-    try:
-        annonce = Annonce.objects.get(pk=id)
-    except Annonce.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = AnnonceSerializer(annonce)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':#edit
-        serializer = AnnonceSerializer(annonce, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        annonce.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 class AnnonceViewSet(viewsets.ModelViewSet):
     serializer_class=AnnonceSerializer
 
@@ -76,7 +43,7 @@ class AnnonceViewSet(viewsets.ModelViewSet):
         Annonce_object.title=data["title"]
         Annonce_object.description=data['description']
         Annonce_object.bienImmobilier=data['bienImmobilier']
-        Annonce_object.type=TypeAnnonce.objects.get(pk=typee)
+        Annonce_object.type=TypeAnnonce.objects.get(pk=data['type_id'])
         Annonce_object.save()
         serializer = CommuneSerializer(Annonce_object)
         return Response(serializer.data)
