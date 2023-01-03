@@ -1,5 +1,5 @@
 
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 
 # Create your views here.
 from django.http import JsonResponse
@@ -9,6 +9,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework import filters
+from rest_framework.views import APIView
+from rest_framework import generics
+
 class AnnonceViewSet(viewsets.ModelViewSet):
     serializer_class=AnnonceSerializer
 
@@ -47,4 +51,16 @@ class AnnonceViewSet(viewsets.ModelViewSet):
         Annonce_object.save()
         serializer = CommuneSerializer(Annonce_object)
         return Response(serializer.data)
-        
+class AnnonceDetail(generics.RetrieveAPIView):
+    serializer_class = AnnonceSerializer
+
+    def get_queryset(self):
+        title = self.request.query_params.get('title', None)
+        return Annonce.objects.filter(title=title)
+#Rechercher, dans le titre et la description, toutes les AI contenant un ou plusieurs mots spécifiés par l’utilisateur.
+
+class AnnonceSearch(generics.ListAPIView):
+    queryset = Annonce.objects.all()
+    serializer_class = AnnonceSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title','description']
