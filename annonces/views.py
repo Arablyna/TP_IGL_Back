@@ -13,6 +13,7 @@ from rest_framework import filters
 from rest_framework.views import APIView
 from rest_framework import generics
 from regions.serializers import WilayaSerialaizer,CommuneSerializer
+from datetime import datetime as dt
 
 class AnnonceViewSet(viewsets.ModelViewSet):
     serializer_class=AnnonceSerializer
@@ -42,18 +43,56 @@ class AnnonceViewSet(viewsets.ModelViewSet):
         annonce.delete()
         response_message = {"message": "Item has been deleted"}
         return Response(response_message)
-def AnnonceDetail(self,request):
-    annonce_data=request.data
-    queryset = Annonce.objects.all()
-    serializer_class = AnnonceSerializer
-    list=[]
-    for annonce in queryset:
-        #if(annonce_data[])
-     return list
+#une fonction qui compare entre 2 dates, on en aura besion pour effectuer le filtre
+def compare_dates(date1, date2):
+
+    dt_obj1 = dt.strptime(date1, "%Y-%m-%d")
+    dt_obj2 = dt.strptime(date2, "%Y-%m-%d")
+    if dt_obj1 >= dt_obj2:
+        return True
+    elif dt_obj1 < dt_obj2:
+        return False
+    
 #Rechercher, dans le titre et la description, toutes les AI contenant un ou plusieurs mots spécifiés par l’utilisateur.
 class AnnonceSearch(generics.ListAPIView):
     queryset = Annonce.objects.all()
     serializer_class = AnnonceSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title','description']
-    search_fields = ['title','description']
+#Filtrer les résultats de recherche selon (wilaya/commune/type/2dates):
+@api_view(['GET', 'POST'])
+def firstFunction(request):
+    #declarations initiales:
+    Commune=""
+    Wilaya=""
+    Type=""
+    date_1=""
+    date_2=""
+    list=[]
+    queryset = Annonce.objects.all()
+    form=request.data
+    #pour chaque champs,on verifie si il existe dans le request.data
+    if( 'type_id' in request.data):
+        Type=form['type_id']
+    if( 'wilaya_id' in request.data):
+        Wilaya=form['wilaya_id']
+    if( 'commune_id' in request.data):
+        Commune=form['commune_id']
+    if( 'date_1' in request.data):
+        date_1=form['date_1']
+        date_2=form['date_2']
+
+    for annonce in queryset:
+        #On recupere les infos de cet annoce
+        bi = getattr(annonce, 'bienImmobilier')
+        wilaya=getattr(bi, "wilaya")
+        wilaya_id=getattr(wilaya,"id")
+        commune=getattr(bi, "commune")
+        commune_id=getattr(commune, "id")
+        type=getattr(annonce, 'type')
+        type_id=getattr(type, 'id')
+        date=getattr(annonce, 'date')
+        if(Wilaya=="" or int(wilaya_id)==Wilaya) and (Commune=="" or int(commune_id)==Commune) and (Type=="" or int(type_id)==Type) and (date_1=="" or compare_dates(date, date_1)) and (date_2=="" or compare_dates(date_2, date)):
+            list.append(annonce)
+    serializer = AnnonceSerializer(list, many=True)
+    return Response(serializer.data)
