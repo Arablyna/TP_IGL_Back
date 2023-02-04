@@ -1,0 +1,33 @@
+a fin de tester le projet on doit suivre les etapes suivantes:
+1-dans TP_IGL , on execute : . .venv/Scripts/activate
+2-. .venv/Scripts/activate
+3- pip install django 
+4-pip install djangorestframework
+5-pip install psycopg2 to use postgres
+we install all the needed requirements for our django project.
+pour que les modeles soit dans la bdd on utilise :
+-python manage.py makemigrations
+-python manage.py migrate
+//new terminal et il faut qu il soit deconnecte de l env virtuel
+6-cd TP_IGL_BACK
+7-cd reactapp
+8-npm install 
+9-npm build
+et puis on revient a TP_IGL et on execute python manage.py runserver
+ps: 
+*dans settings, Il faut changer le mdp de la base de donnees 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'TP_IGL_23',
+        'USER': 'postgres',
+        'PASSWORD': 'linaesi2233',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
+et mettre le votre 
+*a fin de tester les requetes HTTP , il suffit d executer python manage.py runserver et voir dans postman 
+*a fin de s authentifier http://127.0.0.1:8000/accounts/login . 
+* pour les testes unitaires , on les trouves dans annonces->tests.py
+
