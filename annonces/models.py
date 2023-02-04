@@ -25,14 +25,23 @@ class BienImmobilier(models.Model):
     def __str__(self) -> str:
         return self.name
 class Contact(models.Model):
-    nom = models.CharField(max_length=200, blank=False, null=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
     prenom = models.CharField(max_length=200, blank=False, null=False)
-    mail = models.CharField(max_length=200, blank=False, null=False)
+    username = models.CharField(max_length=200, blank=False, null=False)
     telephone = models.CharField(max_length=200, blank=False, null=False)
     def __str__(self) -> str:
         return self.name
+    
+class Message(models.Model):
+    recepteur = models.CharField(max_length=200, blank=False, null=False)
+    emetteur = models.CharField(max_length=200, blank=False, null=False)
+    message = models.CharField(max_length=200, blank=False, null=False)
+    def __str__(self) -> str:
+        return self.recepteur
 
 class Annonce(models.Model):
+    loc1 = models.CharField(max_length=200, blank=False ,null=False)
+    loc2 = models.CharField(max_length=200, blank=False ,null=False)
     date = models.CharField(max_length=200, blank=False ,null=False)
     title = models.CharField(max_length=200, blank=False ,null=False)
     description = models.CharField(max_length=3000, blank=False, null=False)
@@ -42,8 +51,6 @@ class Annonce(models.Model):
     type = models.ForeignKey(TypeAnnonce, blank=False, null=False, on_delete=models.CASCADE)
     categorie = models.ForeignKey(CategorieAnnonce, blank=False, null=False, on_delete=models.CASCADE)
     contact = models.ForeignKey(Contact, blank=False, null=False, on_delete=models.CASCADE)
-
+  
     def __str__(self) -> str:
         return self.title + " " + self.type.name
-
-

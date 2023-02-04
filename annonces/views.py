@@ -3,8 +3,8 @@ from django.shortcuts import render,get_object_or_404
 
 # Create your views here.
 from django.http import JsonResponse
-from .models import Contact,BienImmobilier, TypeAnnonce, Annonce,Wilaya,Commune,CategorieAnnonce
-from .serializers import WilayaSerialaizer,CommuneSerializer,TypeAnnonceSerializer,BienImmobilierSerializer,AnnonceSerializer
+from .models import Message,Contact,BienImmobilier, TypeAnnonce, Annonce,Wilaya,Commune,CategorieAnnonce
+from .serializers import MessageSerializer,WilayaSerialaizer,CommuneSerializer,TypeAnnonceSerializer,BienImmobilierSerializer,AnnonceSerializer,ContactSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -35,7 +35,7 @@ class AnnonceViewSet(viewsets.ModelViewSet):
         new_type=TypeAnnonce.objects.get(pk=typee)
         new_categorie=CategorieAnnonce.objects.get(pk=categroie)
         new_contact=Contact.objects.get(pk=categroie)
-        new_annonce=Annonce.objects.create(contact=new_contact,title=annonce_data['title'],date=annonce_data['date'],prix=annonce_data['prix'],surface=annonce_data['surface'],description=annonce_data['description'],bienImmobilier=new_bi,type=new_type,categorie=new_categorie)
+        new_annonce=Annonce.objects.create(contact=new_contact,title=annonce_data['title'],loc1=annonce_data['loc1'],loc2=annonce_data['loc2'],date=annonce_data['date'],prix=annonce_data['prix'],surface=annonce_data['surface'],description=annonce_data['description'],bienImmobilier=new_bi,type=new_type,categorie=new_categorie)
         serializer =AnnonceSerializer(new_annonce)
         return Response(serializer.data)
     def destroy(self, request, *args, **kwargs):
@@ -43,6 +43,26 @@ class AnnonceViewSet(viewsets.ModelViewSet):
         annonce.delete()
         response_message = {"message": "Item has been deleted"}
         return Response(response_message)
+#pour l utilisateur:
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class=ContactSerializer
+
+    def get_queryset(self):
+        contact=Contact.objects.all()
+        return contact
+    def create(self,request,*args,**Kwargs):
+        contact_data=request.data
+        new_contact=Contact.objects.create(name=contact_data['name'],prenom=contact_data['prenom'],username=str(request.user),telephone=contact_data['telephone'])
+        serializer =ContactSerializer(new_contact)
+        return Response(serializer.data)
+#pour les messages (la fonction qui nous permet d envoyer un message):
+class MessageViewSet(viewsets.ModelViewSet):
+    serializer_class=MessageSerializer
+    def create(self,request,*args,**Kwargs):
+        message_data=request.data
+        new_message=Message.objects.create(recepteur=message_data['recepteur'],emetteur=str(request.user),message=message_data['message'])
+        serializer =MessageSerializer(new_message)
+        return Response(serializer.data)
 #une fonction qui compare entre 2 dates, on en aura besion pour effectuer le filtre
 def compare_dates(date1, date2):
 
@@ -96,3 +116,18 @@ def firstFunction(request):
             list.append(annonce)
     serializer = AnnonceSerializer(list, many=True)
     return Response(serializer.data)
+
+#afficher les messages recus:
+@api_view(['GET'])
+def recevoir_message(request):
+    #declarations initiales:
+    queryset = Message.objects.all()
+    list=[]
+    for message in queryset:
+        recepteur=getattr(message, 'recepteur')
+        if(recepteur==str(request.user)) :
+            list.append(message)
+    serializer = MessageSerializer(list, many=True)
+    return Response(serializer.data)
+
+

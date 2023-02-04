@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BienImmobilier, TypeAnnonce, Annonce,CategorieAnnonce,Contact
+from .models import BienImmobilier, TypeAnnonce, Annonce,CategorieAnnonce,Contact,Message
 from regions.serializers import WilayaSerialaizer,CommuneSerializer
 class TypeAnnonceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,7 +14,12 @@ class CategorieAnnonceSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ['nom', 'prenom','mail','telephone']
+        fields = ['id','name', 'prenom','username','telephone']
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id','recepteur', 'emetteur','message']
     
 
 class BienImmobilierSerializer(serializers.ModelSerializer):
@@ -31,4 +36,4 @@ class AnnonceSerializer(serializers.ModelSerializer):
     contact = ContactSerializer(many = False)
     class Meta:
         model = Annonce
-        fields = ['id', 'title', 'description', 'bienImmobilier', 'type','categorie','prix','surface','contact','date']
+        fields = ['id', 'title', 'description', 'bienImmobilier', 'type','categorie','prix','surface','contact','date','loc1','loc2']
