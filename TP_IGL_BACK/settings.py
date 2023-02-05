@@ -66,7 +66,7 @@ ROOT_URLCONF = 'TP_IGL_BACK.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates',os.path.join(BASE_DIR_2,"reactapp/build")],
+        'DIRS': [BASE_DIR / 'templates',os.path.join(BASE_DIR_2,"projet-igl/build")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'TP_IGL_23',
         'USER': 'postgres',
-        'PASSWORD': 'linaesi2233',
+        'PASSWORD': 'wissam12',
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -140,7 +140,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS=[
-    os.path.join(BASE_DIR_2,"reactapp/build/static")
+    os.path.join(BASE_DIR_2,"projet-igl/build/static")
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
