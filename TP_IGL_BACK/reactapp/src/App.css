@@ -16,6 +16,61 @@ body {
   background-color: #F5F5F5;
   font-weight: 600;
 }
+.Error{
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.HeroSection{
+  background: url('./Assets/home.jpg') center center/cover no-repeat;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: inset 0 0 0 1000px rgba(57, 36, 0, 0.3);
+  object-fit: contain;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-family: var(--font-raleway);
+  font-weight: 600;
+}
+
+.HeroSection .centre{
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 40px;
+}
+
+.HeroSection .HeroInfos{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: #FFFFFF;
+  font-family: var(--font-raleway);
+  font-weight: 600;
+}
+
+.HeroSection .Title{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  color: #FFFFFF;
+  font-family: var(--font-raleway);
+  font-weight: 600;
+}
+
+.HeroSection h1{
+  font-size: 50px;
+  font-family: var(--font-raleway);
+  font-weight: 600;
+}
 
 .background {
   width: 100vw;
@@ -30,7 +85,7 @@ button{
   padding: 10px;
   color: #FFFFFF;
   background: #BF9959;
-  border: solid #BF9959;
+  border: solid rgb(191, 153, 89);
   font-size: 16px;
   font-family: var(--font-raleway);
   font-weight: 600;

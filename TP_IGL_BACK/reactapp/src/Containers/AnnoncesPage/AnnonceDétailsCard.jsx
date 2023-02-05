@@ -1,17 +1,19 @@
 import React from "react";
 import {IoCloseOutline, IoChatbubblesOutline, IoMailOutline, IoCallOutline, IoLocationOutline} from "react-icons/io5";
 import ImageSlider from "../../Components/ImageSlider";
+import {useSelector} from 'react-redux';
 
-const AnnonceDetailsCard = ({user, annonce, closeDetails}) => {
+const AnnonceDetailsCard = ({annonce, closeDetails}) => {
+    const user = useSelector((state) => state.user.value);
     return (
         <div className="Overlay" onClick={() => closeDetails(false)}>
             <div className="annonceDetails" onClick={(e) => {e.stopPropagation()}}>
                 <div className="Profile">
                     <div className="section">
-                        <img src={user.Image.length > 0 ? user.Image : 'https://via.placeholder.com/400'}
+                        <img src={user.photo}
                             alt='Profil'/>
                         <div>
-                            <h2>{user.FirstName} {user.LastName}</h2>
+                            <h2>{user.prenom} {user.nom}</h2>
                             <h3>{annonce.Date}</h3>
                         </div>
                     </div>

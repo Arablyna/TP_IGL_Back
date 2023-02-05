@@ -2,8 +2,10 @@ import React from "react";
 import { useState} from "react";
 import logo from '../../Assets/logoSokna.png';
 import { IoSearchOutline, IoChatbubblesOutline} from "react-icons/io5";
+import {useSelector} from 'react-redux';
 
-const NavBar = ({user}) => {
+const NavBar = () => {
+    const user = useSelector((state) => state.user.value);
     const [searchTerm, setSearchTerm] = useState("");
     return (
         <div className='navBar'>
@@ -21,10 +23,11 @@ const NavBar = ({user}) => {
             <div>
             <button><IoChatbubblesOutline size="24px"/></button>
             <div className="Profile">
-                <img src = {user.Image.length > 0 ? user.Image : 'https://via.placeholder.com/400'}
+                <img src = {user.photo }
+                // : 'https://via.placeholder.com/400'
                 alt="Profile"
                 />
-                <h3>{user.FirstName} {user.LastName}</h3>
+                <h3>{user.nom} {user.prenom}</h3>
             </div>
             </div>
         </div>

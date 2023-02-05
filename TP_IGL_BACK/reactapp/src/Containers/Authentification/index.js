@@ -1,12 +1,16 @@
 import React from "react";
-import * as Components from './Components';
 import { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
-import useSelector from "react-redux";
+import {useDispatch, useSelector} from 'react-redux';
+import { setCurrentUser } from "../../Redux/slices/currentUserSlice";
+import AnnoncesPage from './../AnnoncesPage/index.js';
+import logo from '../../Assets/logoSokna.png';
+import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
-    const [user, setUser] = useState({});
-    // const currentUser = useSelector({state}) => state.user.value);
+    const currentUser = useSelector((state) => state.user.value);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleCallBackResponse = (response) => {
         var userObject = jwt_decode(response.credential);
@@ -16,18 +20,23 @@ const AuthPage = () => {
             "email" : userObject["email"],
             "photo" : userObject["picture"]
         }
-        setUser(userInfos);
-        document.getElementById("Signin").hidden = true;
+        // setUser(userInfos);
+        dispatch(setCurrentUser(userInfos));
+        // Upload user infos to BDD
+
+        // document.getElementById("hero").hidden = true;
+        // if (Object.keys(currentUser).length != 0){
+        //     console.log(currentUser);
+        navigate("./main");
     }
 
     const handleSignOut = (e) => {
-        setUser({});
-        document.getElementById("Signin").hidden = false;
+        // setUser({});
+        dispatch(setCurrentUser({}));
+        // document.getElementById("hero").hidden = false;
     }
 
     useEffect(() => {
-        // console.log("check user");
-        // console.log(state.count.value);
         /*global google*/
         google.accounts.id.initialize({
             client_id : "64942602411-9c3v2baidusqrppj68cmc43v66pp1a0k.apps.googleusercontent.com",
@@ -44,69 +53,35 @@ const AuthPage = () => {
 
     const [signIn, toggle] = React.useState(true);
      return(
+        // <Route path='/' exact />
         <div className="App">
-            <div id="Signin"></div>
-            {
-                Object.keys(user).length != 0 &&
-                <button onClick={(e) => handleSignOut(e)}>Sign Out</button>
-            }
-            
-            {
-                user &&
-                <div>
-                    <img src={user.photo}></img>
-                    <h3>{user.nom}</h3>
+            <div className="HeroSection" id="hero">
+                <div className="centre">
+                    <div className="HeroInfos">
+                        <div className="Title">
+                            <img src={logo} alt="Logo"/>
+                            <h1>Sokna</h1>
+                        </div>
+                        <p>Obtenez votre maison aujourd'hui</p>
+                    </div>
+                    <div id="Signin"></div>
                 </div>
-            }
+            </div>
+            {/* {
+                Object.keys(currentUser).length != 0 &&
+                <AnnoncesPage/>
+            } */}
         </div>
-        //  <Components.Container>
-        //      <Components.SignUpContainer signinIn={signIn}>
-        //          <Components.Form>
-        //              <Components.Title>Creer un compte</Components.Title>
-        //              <Components.Input type='text' placeholder='Nom complet' />
-        //              <Components.Input type='email' placeholder='Email' />
-        //              <Components.Input type='password' placeholder='Mot de passe' />
-        //              <Components.Button>S'inscrire'</Components.Button>
-        //          </Components.Form>
-        //      </Components.SignUpContainer>
-
-        //      <Components.SignInContainer signinIn={signIn}>
-        //           <Components.Form>
-        //               <Components.Title>Se connecter</Components.Title>
-        //               <Components.Input type='email' placeholder='Email' />
-        //               <Components.Input type='password' placeholder='Mot de passe' />
-        //               <Components.Anchor href='#'>Se connecter avec Gmail</Components.Anchor>
-        //               <Components.Button>Se connecter</Components.Button>
-        //           </Components.Form>
-        //      </Components.SignInContainer>
-
-        //      <Components.OverlayContainer signinIn={signIn}>
-        //          <Components.Overlay signinIn={signIn}>
-
-        //          <Components.LeftOverlayPanel signinIn={signIn}>
-        //              <Components.Title>Connecter maintenant!</Components.Title>
-        //              <Components.Paragraph>
-        //                  Connecter avec votre compte sokna
-        //              </Components.Paragraph>
-        //              <Components.GhostButton onClick={() => toggle(true)}>
-        //                  Se connecter 
-        //              </Components.GhostButton>
-        //              </Components.LeftOverlayPanel>
-
-        //              <Components.RightOverlayPanel signinIn={signIn}>
-        //                <Components.Title>Sokna</Components.Title>
-        //                <Components.Paragraph>
-        //                Publier et consulter les annonces immobilières avec Sokna .
-        //                </Components.Paragraph>
-        //                    <Components.GhostButton onClick={() => toggle(false)}>
-        //                      S'inscrire
-        //                    </Components.GhostButton> 
-        //              </Components.RightOverlayPanel>
- 
-        //          </Components.Overlay>
-        //      </Components.OverlayContainer>
-
-        //  </Components.Container>
+    //     <Router>
+    //     <Layout>
+    //       <Routes>
+    //         <Route exact path="/" element={<Home/>}/>
+    //         <Route exact path="/login" element={<Login/>}/>
+    //         <Route exact path="/recovery-password" element={<RecoveryPassword/>}/>
+    //         <Route path="*" element={<NotFound/>}/>
+    //       </Routes>
+    //     </Layout>
+    //   </Router>
      )
 }
 export default AuthPage;

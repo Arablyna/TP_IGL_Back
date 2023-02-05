@@ -6,14 +6,11 @@ import NavBar from "./NavBar";
 import AnnonceDetailsCard from './AnnonceDétailsCard.jsx'
 import FiltresCard from './FiltresCard.jsx'
 import AddCard from "./AddCard.jsx";
+import {useSelector} from 'react-redux';
 import '../../App.css';
 
 const AnnoncesPage = () => {
-  const user = {
-    "FirstName" : "Wissam",
-    "LastName" : "Aissaoui",
-    "Image" : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80"
-  }
+  const user = useSelector((state) => state.user.value);
   const annonces = [
     {
       "Poster": ["https://images.adsttc.com/media/images/5efe/1f7f/b357/6540/5400/01d7/newsletter/archdaily-houses-104.jpg?1593712501", "https://uploads-ssl.webflow.com/5fa8df3ac2183ee78c7be185/5fb2f73a910d32a62244aaa4_hero_optimized.webp"],
@@ -87,7 +84,7 @@ const AnnoncesPage = () => {
   return (
     <div className="annoncesPage">
       <div className="background">
-        <NavBar user={user}/>
+        <NavBar/>
         <div className="results">
           <div className="bar">
           <h1>Annonces immobilières</h1> 
@@ -117,7 +114,7 @@ const AnnoncesPage = () => {
         </div>
       </div>
       {
-        openDetails && <AnnonceDetailsCard user={user} annonce = {selectedAnnonce} closeDetails={setOpenDetails}/>
+        openDetails && <AnnonceDetailsCard annonce = {selectedAnnonce} closeDetails={setOpenDetails}/>
       }
       {
         openFiltres && <FiltresCard closeFiltres={setOpenFiltres}/>

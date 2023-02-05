@@ -97,6 +97,7 @@ const AddCard = ({closeAjout}) => {
         if (handleValidation()) {
             alert("Form submitted");
             closeAjout(false);
+            // Upload annonce infos to BDD
         }
     }
 
